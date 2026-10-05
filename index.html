@@ -1,32 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru" data-theme="dark" data-accent="blue" data-gradient="soft">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WZ Assistant</title>
+    <title>WZ-Assistant</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ========== ПЕРЕМЕННЫЕ ТЕМ ========== */
-        :root[data-theme="dark"] {
-            --bg-primary: #0f1620;
-            --bg-secondary: #1a2433;
-            --bg-tertiary: #253243;
-            --bg-elevated: #2d3b4d;
-            --text-primary: #e8eef5;
-            --text-secondary: #7a8a9e;
-            --text-muted: #4d5c6e;
-            --accent: #5a9fd4;
-            --accent-soft: rgba(90, 159, 212, 0.15);
-            --accent-hover: #7ab5e0;
-            --success: #4dd07a;
-            --danger: #f05252;
-            --warning: #f0a848;
-            --border: rgba(255, 255, 255, 0.06);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
-        }
-
+        /* ============================================
+           ТЕМЫ
+           ============================================ */
         :root[data-theme="light"] {
             --bg-primary: #f4f6f9;
             --bg-secondary: #ffffff;
@@ -35,18 +17,69 @@
             --text-primary: #1a2433;
             --text-secondary: #6b7a8f;
             --text-muted: #9aa8ba;
-            --accent: #3d8bc9;
-            --accent-soft: rgba(61, 139, 201, 0.1);
-            --accent-hover: #2d7ab8;
-            --success: #2ea85a;
-            --danger: #e03e3e;
-            --warning: #e08a20;
             --border: rgba(0, 0, 0, 0.06);
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
         }
 
+        :root[data-theme="dark"] {
+            --bg-primary: #0f1620;
+            --bg-secondary: #1a2433;
+            --bg-tertiary: #253243;
+            --bg-elevated: #2d3b4d;
+            --text-primary: #e8eef5;
+            --text-secondary: #7a8a9e;
+            --text-muted: #4d5c6e;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        :root[data-theme="oled"] {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #141414;
+            --bg-elevated: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #8a8a8a;
+            --text-muted: #555555;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.6);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.7);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.85);
+        }
+
+        /* ============================================
+           ЦВЕТА АКЦЕНТА
+           ============================================ */
+        :root[data-accent="blue"]   { --accent: #5a9fd4; --accent-hover: #7ab5e0; --accent-soft: rgba(90, 159, 212, 0.15); --accent-dark: #2b5278; }
+        :root[data-accent="purple"] { --accent: #9d7bd8; --accent-hover: #b398e5; --accent-soft: rgba(157, 123, 216, 0.15); --accent-dark: #4a3670; }
+        :root[data-accent="green"]  { --accent: #4dd07a; --accent-hover: #6ee093; --accent-soft: rgba(77, 208, 122, 0.15); --accent-dark: #2a6640; }
+        :root[data-accent="orange"] { --accent: #f0a848; --accent-hover: #f4bc6b; --accent-soft: rgba(240, 168, 72, 0.15); --accent-dark: #7a5420; }
+        :root[data-accent="red"]    { --accent: #f05252; --accent-hover: #f47474; --accent-soft: rgba(240, 82, 82, 0.15); --accent-dark: #7a2020; }
+        :root[data-accent="pink"]   { --accent: #e87db8; --accent-hover: #ee9ccb; --accent-soft: rgba(232, 125, 184, 0.15); --accent-dark: #6e3656; }
+
+        /* ============================================
+           ГРАДИЕНТЫ
+           ============================================ */
+        :root[data-gradient="flat"] {
+            --gradient: linear-gradient(160deg, var(--accent) 0%, var(--accent) 100%);
+        }
+        :root[data-gradient="soft"] {
+            --gradient: linear-gradient(160deg, var(--accent) 0%, var(--accent-dark) 100%);
+        }
+        :root[data-gradient="vivid"] {
+            --gradient: linear-gradient(160deg, var(--accent-hover) 0%, var(--accent) 50%, var(--accent-dark) 100%);
+        }
+        :root[data-gradient="diagonal"] {
+            --gradient: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 40%, var(--accent-hover) 100%);
+        }
+
+        /* ============================================
+           БАЗА
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -70,25 +103,41 @@
             letter-spacing: -0.01em;
         }
 
-        /* ========== ХЕДЕР ========== */
+        /* ============================================
+           ХЕДЕР
+           ============================================ */
         .header {
-            background: linear-gradient(160deg, var(--accent) 0%, #2b5278 100%);
-            padding: 28px 20px 32px;
-            border-radius: 0 0 28px 28px;
+            background: var(--gradient);
+            padding: 32px 20px 36px;
+            border-radius: 0 0 32px 32px;
             margin-bottom: 20px;
             box-shadow: var(--shadow-md);
             position: relative;
             overflow: hidden;
+            text-align: center;
+            transition: background 0.3s ease;
         }
 
         .header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20%;
+            top: -60%;
+            right: -25%;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -60%;
+            left: -20%;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -99,23 +148,23 @@
         }
 
         .header h1 {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 26px;
+            font-weight: 700;
             color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
         }
 
-        .header .subtitle {
+        .header .bot-username {
             font-size: 13px;
             color: rgba(255, 255, 255, 0.75);
-            margin-top: 6px;
-            font-weight: 400;
+            font-weight: 500;
+            letter-spacing: 0.2px;
         }
 
-        /* ========== КОНТЕНТ ========== */
+        /* ============================================
+           КОНТЕНТ
+           ============================================ */
         .content {
             padding: 0 16px;
             animation: fadeSlide 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -126,7 +175,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== КАРТОЧКИ ========== */
+        /* ============================================
+           СКЕЛЕТОН
+           ============================================ */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 20px;
+            height: 76px;
+            margin-bottom: 14px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ============================================
+           КАРТОЧКИ
+           ============================================ */
         .card {
             background: var(--bg-secondary);
             border-radius: 20px;
@@ -157,7 +225,9 @@
             line-height: 1.5;
         }
 
-        /* ========== КНОПКИ ========== */
+        /* ============================================
+           КНОПКИ
+           ============================================ */
         .btn {
             display: flex;
             align-items: center;
@@ -195,18 +265,20 @@
         }
 
         .btn-success {
-            background: var(--success);
+            background: var(--success, #4dd07a);
             color: #ffffff;
             border-color: transparent;
         }
 
         .btn-danger {
-            background: var(--danger);
+            background: var(--danger, #f05252);
             color: #ffffff;
             border-color: transparent;
         }
 
-        /* ========== ФОРМЫ ========== */
+        /* ============================================
+           ФОРМЫ
+           ============================================ */
         .input-group {
             margin-bottom: 16px;
         }
@@ -258,7 +330,9 @@
             padding-right: 40px;
         }
 
-        /* ========== НИЖНЕЕ МЕНЮ ========== */
+        /* ============================================
+           НИЖНЕЕ МЕНЮ
+           ============================================ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -304,7 +378,9 @@
             line-height: 1;
         }
 
-        /* ========== ПУСТЫЕ СОСТОЯНИЯ ========== */
+        /* ============================================
+           ПУСТЫЕ СОСТОЯНИЯ
+           ============================================ */
         .empty {
             text-align: center;
             padding: 48px 24px;
@@ -323,7 +399,9 @@
             line-height: 1.6;
         }
 
-        /* ========== СПИСКИ ========== */
+        /* ============================================
+           СПИСКИ
+           ============================================ */
         .list-item {
             background: var(--bg-secondary);
             border-radius: 16px;
@@ -373,7 +451,7 @@
 
         .btn-delete {
             background: transparent;
-            color: var(--danger);
+            color: var(--danger, #f05252);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 8px 12px;
@@ -385,11 +463,13 @@
         }
 
         .btn-delete:active {
-            background: var(--danger);
+            background: var(--danger, #f05252);
             color: white;
         }
 
-        /* ========== МОДАЛКА ========== */
+        /* ============================================
+           МОДАЛКА
+           ============================================ */
         .modal {
             position: fixed;
             top: 0;
@@ -417,7 +497,7 @@
             background: var(--bg-secondary);
             width: 100%;
             border-radius: 28px 28px 0 0;
-            padding: 24px 20px 32px;
+            padding: 20px 20px 32px;
             max-height: 90vh;
             overflow-y: auto;
             animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -480,7 +560,9 @@
             margin-bottom: 0;
         }
 
-        /* ========== TOAST ========== */
+        /* ============================================
+           TOAST
+           ============================================ */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -498,6 +580,7 @@
             pointer-events: none;
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
+            max-width: 90vw;
         }
 
         .toast.show {
@@ -505,27 +588,15 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ========== ЗАГОЛОВОК ДНЯ ========== */
-        .day-header {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 20px 4px 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .day-header:first-child {
-            margin-top: 0;
-        }
-
-        /* ========== ДОСТУП ЗАПРЕЩЁН ========== */
+        /* ============================================
+           ДОСТУП ЗАПРЕЩЁН
+           ============================================ */
         .access-denied {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 70vh;
+            min-height: 60vh;
             padding: 40px 24px;
             text-align: center;
         }
@@ -547,15 +618,36 @@
             color: var(--text-secondary);
             line-height: 1.6;
             max-width: 320px;
+            margin-bottom: 20px;
         }
 
-        /* ========== НАСТРОЙКИ ========== */
+        .debug-info {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+            margin-top: 16px;
+            word-break: break-all;
+            max-width: 320px;
+        }
+
+        /* ============================================
+           НАСТРОЙКИ
+           ============================================ */
         .setting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
+            padding: 14px 0;
             border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        .setting-row:active {
+            opacity: 0.7;
         }
 
         .setting-row:last-child {
@@ -566,6 +658,9 @@
             font-size: 15px;
             font-weight: 500;
             letter-spacing: -0.1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .setting-desc {
@@ -574,54 +669,91 @@
             margin-top: 3px;
         }
 
-        /* ========== ПЕРЕКЛЮЧАТЕЛЬ ========== */
-        .toggle {
-            position: relative;
-            width: 50px;
-            height: 30px;
+        .setting-value {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           СЕТКА ЦВЕТОВ / ТЕМ
+           ============================================ */
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 8px;
             background: var(--bg-tertiary);
-            border-radius: 15px;
+            border: 2px solid transparent;
+            border-radius: 14px;
             cursor: pointer;
-            transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-            border: 1px solid var(--border);
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
         }
 
-        .toggle::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 22px;
-            height: 22px;
-            background: var(--text-secondary);
+        .option-item:active {
+            transform: scale(0.95);
+        }
+
+        .option-item.selected {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .option-item .color-preview {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
         }
 
-        .toggle.active {
-            background: var(--accent);
-            border-color: transparent;
+        .option-item .option-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        .toggle.active::after {
-            left: 23px;
-            background: #ffffff;
+        .option-item.selected .option-label {
+            color: var(--accent);
         }
 
-        /* ========== СКЕЛЕТОН ========== */
-        .skeleton {
-            background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 16px;
-            height: 60px;
-            margin-bottom: 12px;
+        .option-item .theme-icon {
+            font-size: 24px;
+            line-height: 1;
         }
 
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        /* ============================================
+           ГРАДИЕНТ ПРЕВЬЮ
+           ============================================ */
+        .gradient-preview {
+            width: 100%;
+            height: 44px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        /* ============================================
+           ДЕНЬ НЕДЕЛИ
+           ============================================ */
+        .day-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 20px 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .day-header:first-child {
+            margin-top: 0;
         }
     </style>
 </head>
@@ -630,13 +762,18 @@
         <!-- HEADER -->
         <div class="header">
             <div class="header-content">
-                <h1 id="header-title">📱 WZ Assistant</h1>
-                <div class="subtitle" id="header-subtitle">Загрузка...</div>
+                <h1>WZ-Assistant</h1>
+                <div class="bot-username">@wz_assistant_bot</div>
             </div>
         </div>
 
         <!-- CONTENT -->
-        <div class="content" id="content"></div>
+        <div class="content" id="content">
+            <!-- Skeleton во время загрузки -->
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </div>
 
         <!-- BOTTOM NAV -->
         <div class="bottom-nav" id="bottom-nav" style="display:none;">
@@ -683,35 +820,74 @@
         tg.expand();
 
         // ============================================
-        // 2. ТЕМА
+        // 2. НАСТРОЙКИ ОФОРМЛЕНИЯ
         // ============================================
-        function initTheme() {
-            const saved = localStorage.getItem('wz_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved);
+        const THEMES = {
+            light: { name: 'Светлая', icon: '☀️' },
+            dark:  { name: 'Тёмная',  icon: '🌙' },
+            oled:  { name: 'OLED',    icon: '⚫' }
+        };
 
-            const bg = saved === 'dark' ? '#0f1620' : '#f4f6f9';
-            tg.setHeaderColor(bg);
-            tg.setBackgroundColor(bg);
+        const ACCENTS = {
+            blue:   { name: 'Синий',      color: '#5a9fd4' },
+            purple: { name: 'Фиолетовый', color: '#9d7bd8' },
+            green:  { name: 'Зелёный',    color: '#4dd07a' },
+            orange: { name: 'Оранжевый',  color: '#f0a848' },
+            red:    { name: 'Красный',    color: '#f05252' },
+            pink:   { name: 'Розовый',    color: '#e87db8' }
+        };
+
+        const GRADIENTS = {
+            flat:     { name: 'Плоский' },
+            soft:     { name: 'Мягкий' },
+            vivid:    { name: 'Яркий' },
+            diagonal: { name: 'Диагональный' }
+        };
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('wz_theme', theme);
+            updateTelegramColors();
         }
 
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('wz_theme', next);
+        function applyAccent(accent) {
+            document.documentElement.setAttribute('data-accent', accent);
+            localStorage.setItem('wz_accent', accent);
+            updateTelegramColors();
+        }
 
-            const bg = next === 'dark' ? '#0f1620' : '#f4f6f9';
-            tg.setHeaderColor(bg);
-            tg.setBackgroundColor(bg);
+        function applyGradient(gradient) {
+            document.documentElement.setAttribute('data-gradient', gradient);
+            localStorage.setItem('wz_gradient', gradient);
+        }
 
-            showToast(next === 'dark' ? '🌙 Тёмная тема' : '☀️ Светлая тема');
-            if (state.page === 'settings') renderSettings();
+        function updateTelegramColors() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const colors = {
+                light: '#f4f6f9',
+                dark:  '#0f1620',
+                oled:  '#000000'
+            };
+            try {
+                tg.setHeaderColor(colors[theme] || colors.dark);
+                tg.setBackgroundColor(colors[theme] || colors.dark);
+            } catch (e) {}
+        }
+
+        function initAppearance() {
+            const theme = localStorage.getItem('wz_theme') || 'dark';
+            const accent = localStorage.getItem('wz_accent') || 'blue';
+            const gradient = localStorage.getItem('wz_gradient') || 'soft';
+            applyTheme(theme);
+            applyAccent(accent);
+            applyGradient(gradient);
         }
 
         // ============================================
-        // 3. ЗАГРУЗКА ДАННЫХ С GITHUB
+        // 3. ЗАГРУЗКА ДАННЫХ С КЕШЕМ
         // ============================================
         const DATA_BASE = './data';
+        const CACHE_KEY = 'wz_cache_v1';
 
         async function loadJSON(name) {
             try {
@@ -724,12 +900,28 @@
             }
         }
 
+        function saveCache(data) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            } catch (e) {}
+        }
+
+        function loadCache() {
+            try {
+                const raw = localStorage.getItem(CACHE_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
         // ============================================
         // 4. STATE
         // ============================================
         const state = {
             page: 'schedule',
             user: null,
+            userName: 'Гость',
             role: 'guest',
             participants: {},
             schedule: [],
@@ -737,19 +929,35 @@
             files: [],
             notes: [],
             substitutions: [],
-            loaded: false
+            loaded: false,
+            debugId: null
         };
 
         // ============================================
         // 5. ИНИЦИАЛИЗАЦИЯ
         // ============================================
         async function init() {
-            initTheme();
+            initAppearance();
 
             // Получаем юзера
             state.user = tg.initDataUnsafe?.user || null;
+            state.debugId = state.user ? String(state.user.id) : 'нет Telegram ID (открыто в браузере)';
 
-            // Загружаем данные
+            // 1. Показываем кеш, если есть
+            const cache = loadCache();
+            if (cache) {
+                Object.assign(state, cache);
+                state.loaded = true;
+                // Определяем роль из кеша
+                if (state.user) {
+                    const uid = String(state.user.id);
+                    const p = state.participants[uid];
+                    state.role = p ? p.role : 'guest';
+                    state.userName = p ? p.name : (state.user.first_name || 'Гость');
+                }
+            }
+
+            // 2. Загружаем свежие данные
             const [participants, schedule, files, notes, substitutions] = await Promise.all([
                 loadJSON('participants'),
                 loadJSON('schedule'),
@@ -758,49 +966,59 @@
                 loadJSON('substitutions')
             ]);
 
-            state.participants = participants || {};
-            state.schedule = schedule?.lessons || [];
-            state.files = files?.categories || [];
-            state.notes = notes?.notes || [];
-            state.substitutions = substitutions?.substitutions || [];
+            state.participants = participants || state.participants;
+            state.schedule = schedule?.lessons || state.schedule;
+            state.files = files?.categories || state.files;
+            state.notes = notes?.notes || state.notes;
+            state.substitutions = substitutions?.substitutions || state.substitutions;
 
-            // Определяем роль
+            // Определяем роль заново
             if (state.user) {
                 const uid = String(state.user.id);
                 const p = state.participants[uid];
                 state.role = p ? p.role : 'guest';
                 state.userName = p ? p.name : (state.user.first_name || 'Гость');
             } else {
-                // Если открыто в браузере (без Telegram) — даём роль guest для теста
                 state.role = 'guest';
-                state.userName = 'Тестовый пользователь';
+                state.userName = 'Тест (без Telegram)';
             }
+
+            // Кешируем
+            saveCache({
+                participants: state.participants,
+                schedule: state.schedule,
+                files: state.files,
+                notes: state.notes,
+                substitutions: state.substitutions
+            });
 
             state.loaded = true;
 
-            // Проверяем доступ
+            // 3. Рендерим
             if (state.role === 'guest') {
                 renderAccessDenied();
                 return;
             }
 
-            // Показываем навигацию и рендерим
             document.getElementById('bottom-nav').style.display = 'flex';
             setupNav();
             renderPage();
         }
 
         // ============================================
-        // 6. ПРОВЕРКА ДОСТУПА
+        // 6. ДОСТУП ЗАПРЕЩЁН
         // ============================================
         function renderAccessDenied() {
-            document.getElementById('header-subtitle').textContent = 'Доступ ограничен';
             const content = document.getElementById('content');
             content.innerHTML = `
                 <div class="access-denied">
                     <div class="icon">🚫</div>
                     <h2>Доступ запрещён</h2>
-                    <p>Вы не являетесь участником приложения. Пожалуйста, обратитесь к <b>Мистеру WaWeeZ</b> для получения доступа.</p>
+                    <p>Вы не являетесь участником приложения. Обратитесь к <b>Мистеру WaWeeZ</b> для получения доступа.</p>
+                    <div class="debug-info">
+                        <b>Ваш TG ID:</b><br>
+                        ${state.debugId}
+                    </div>
                 </div>
             `;
         }
@@ -830,9 +1048,7 @@
         // 8. РАСПИСАНИЕ
         // ============================================
         function renderSchedule() {
-            document.getElementById('header-subtitle').textContent = 'Ваше расписание';
             const content = document.getElementById('content');
-
             let html = '';
 
             if (state.schedule.length === 0) {
@@ -890,9 +1106,7 @@
         // 9. ЗАДАНИЯ
         // ============================================
         function renderTasks() {
-            document.getElementById('header-subtitle').textContent = 'Ваши задания';
             const content = document.getElementById('content');
-
             let html = '';
 
             if (state.tasks.length === 0) {
@@ -922,9 +1136,7 @@
         // 10. ОБЩЕЕ ПРОСТРАНСТВО
         // ============================================
         function renderShared() {
-            document.getElementById('header-subtitle').textContent = 'Общее пространство';
             const content = document.getElementById('content');
-
             let html = `
                 <div class="card">
                     <div class="card-title">📁 Хранилище файлов</div>
@@ -934,11 +1146,12 @@
                     <div class="card-title">📝 Общие заметки</div>
                     <div class="card-subtitle">${state.notes.length} заметок</div>
                 </div>
-                <div class="card">
-                    <div class="card-title">⚠️ Скоро</div>
-                    <div class="card-subtitle">Полная версия «Общего пространства» появится после подключения бота</div>
-                </div>
             `;
+
+            if (state.role === 'owner' || state.role === 'starosta') {
+                html += `<button class="btn btn-primary" onclick="showSharedSettings()">⚙️ Управление</button>`;
+            }
+
             content.innerHTML = html;
         }
 
@@ -946,37 +1159,50 @@
         // 11. НАСТРОЙКИ
         // ============================================
         function renderSettings() {
-            document.getElementById('header-subtitle').textContent = 'Настройки';
             const content = document.getElementById('content');
-
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const theme = document.documentElement.getAttribute('data-theme');
+            const accent = document.documentElement.getAttribute('data-accent');
+            const gradient = document.documentElement.getAttribute('data-gradient');
 
             let html = `
                 <div class="card">
-                    <div class="setting-row">
-                        <div>
-                            <div class="setting-label">🎨 Тема оформления</div>
-                            <div class="setting-desc">${isDark ? 'Тёмная' : 'Светлая'}</div>
-                        </div>
-                        <div class="toggle ${isDark ? 'active' : ''}" onclick="toggleTheme()"></div>
+                    <div class="card-title">👤 Профиль</div>
+                    <div class="card-subtitle">
+                        Имя: <b>${escapeHtml(state.userName)}</b><br>
+                        Роль: <b>${roleName(state.role)}</b>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-title">👤 Профиль</div>
-                    <div class="card-subtitle">
-                        Имя: ${escapeHtml(state.userName)}<br>
-                        Роль: ${roleName(state.role)}
+                    <div class="card-title">🎨 Оформление</div>
+                    <div class="setting-row" onclick="showThemePicker()">
+                        <div>
+                            <div class="setting-label">Тема</div>
+                            <div class="setting-desc">${THEMES[theme].icon} ${THEMES[theme].name}</div>
+                        </div>
+                        <div class="setting-value">→</div>
+                    </div>
+                    <div class="setting-row" onclick="showAccentPicker()">
+                        <div>
+                            <div class="setting-label">Цвет акцента</div>
+                            <div class="setting-desc">${ACCENTS[accent].name}</div>
+                        </div>
+                        <div class="setting-value">→</div>
+                    </div>
+                    <div class="setting-row" onclick="showGradientPicker()">
+                        <div>
+                            <div class="setting-label">Градиент</div>
+                            <div class="setting-desc">${GRADIENTS[gradient].name}</div>
+                        </div>
+                        <div class="setting-value">→</div>
                     </div>
                 </div>
             `;
 
-            // Замены в расписании — только владелец и староста
             if (state.role === 'owner' || state.role === 'starosta') {
                 html += `<button class="btn" onclick="showSubstitutions()">🔄 Замены в расписании</button>`;
             }
 
-            // Общее пространство — только владелец и староста
             if (state.role === 'owner' || state.role === 'starosta') {
                 html += `<button class="btn" onclick="showSharedSettings()">🌐 Общее пространство</button>`;
             }
@@ -996,7 +1222,98 @@
         }
 
         // ============================================
-        // 13. МОДАЛКИ
+        // 13. ВЫБОР ТЕМЫ / ЦВЕТА / ГРАДИЕНТА
+        // ============================================
+        function showThemePicker() {
+            const current = document.documentElement.getAttribute('data-theme');
+            let html = '<div class="grid-options">';
+            for (const [key, t] of Object.entries(THEMES)) {
+                html += `
+                    <div class="option-item ${key === current ? 'selected' : ''}" onclick="pickTheme('${key}')">
+                        <div class="theme-icon">${t.icon}</div>
+                        <div class="option-label">${t.name}</div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            html += `<button class="btn" onclick="closeModal()">Готово</button>`;
+            openModal('Тема оформления', html);
+        }
+
+        function pickTheme(key) {
+            applyTheme(key);
+            renderSettings();
+            showThemePicker();
+            showToast(`Тема: ${THEMES[key].name}`);
+        }
+
+        function showAccentPicker() {
+            const current = document.documentElement.getAttribute('data-accent');
+            let html = '<div class="grid-options">';
+            for (const [key, a] of Object.entries(ACCENTS)) {
+                html += `
+                    <div class="option-item ${key === current ? 'selected' : ''}" onclick="pickAccent('${key}')">
+                        <div class="color-preview" style="background:${a.color}"></div>
+                        <div class="option-label">${a.name}</div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            html += `<button class="btn" onclick="closeModal()">Готово</button>`;
+            openModal('Цвет акцента', html);
+        }
+
+        function pickAccent(key) {
+            applyAccent(key);
+            renderSettings();
+            showAccentPicker();
+            showToast(`Цвет: ${ACCENTS[key].name}`);
+        }
+
+        function showGradientPicker() {
+            const current = document.documentElement.getAttribute('data-gradient');
+            let html = '';
+            for (const [key, g] of Object.entries(GRADIENTS)) {
+                html += `
+                    <div class="option-item ${key === current ? 'selected' : ''}" 
+                         style="padding: 12px; margin-bottom: 10px; flex-direction: row; justify-content: space-between;"
+                         onclick="pickGradient('${key}')">
+                        <div style="flex:1;">
+                            <div class="option-label" style="font-size:14px; text-align:left; margin-bottom:6px;">${g.name}</div>
+                            <div class="gradient-preview" data-grad="${key}"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            html += `<button class="btn" onclick="closeModal()">Готово</button>`;
+            openModal('Градиент', html);
+
+            // Применяем превью градиентов
+            setTimeout(() => {
+                document.querySelectorAll('.gradient-preview').forEach(el => {
+                    const key = el.dataset.grad;
+                    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+                    const accentHover = getComputedStyle(document.documentElement).getPropertyValue('--accent-hover').trim();
+                    const accentDark = getComputedStyle(document.documentElement).getPropertyValue('--accent-dark').trim();
+                    const grads = {
+                        flat: `linear-gradient(160deg, ${accent}, ${accent})`,
+                        soft: `linear-gradient(160deg, ${accent}, ${accentDark})`,
+                        vivid: `linear-gradient(160deg, ${accentHover}, ${accent}, ${accentDark})`,
+                        diagonal: `linear-gradient(135deg, ${accentDark}, ${accent}, ${accentHover})`
+                    };
+                    el.style.background = grads[key];
+                });
+            }, 50);
+        }
+
+        function pickGradient(key) {
+            applyGradient(key);
+            showGradientPicker();
+            showToast(`Градиент: ${GRADIENTS[key].name}`);
+        }
+
+        // ============================================
+        // 14. МОДАЛКИ
         // ============================================
         function openModal(title, bodyHtml) {
             document.getElementById('modal-title').textContent = title;
@@ -1081,7 +1398,7 @@
             openModal('Замены в расписании', `
                 <div class="empty" style="padding: 24px;">
                     <span class="icon">🔄</span>
-                    <p>Функционал замен появится после подключения бота</p>
+                    <p>Функционал замен появится позже</p>
                 </div>
                 <button class="btn" onclick="closeModal()">Понятно</button>
             `);
@@ -1091,18 +1408,18 @@
             openModal('Общее пространство', `
                 <div class="card">
                     <div class="card-title">📁 Хранилище файлов</div>
-                    <div class="card-subtitle">Добавление и удаление файлов</div>
+                    <div class="card-subtitle">Управление файлами и категориями</div>
                 </div>
                 <div class="card">
                     <div class="card-title">📝 Заметки</div>
-                    <div class="card-subtitle">Общие заметки пользователей</div>
+                    <div class="card-subtitle">Общие заметки участников</div>
                 </div>
                 <button class="btn" onclick="closeModal()">Закрыть</button>
             `);
         }
 
         // ============================================
-        // 14. ОТПРАВКА БОТУ
+        // 15. ОТПРАВКА БОТУ
         // ============================================
         function sendToBot(action, data = {}) {
             try {
@@ -1115,7 +1432,7 @@
         }
 
         // ============================================
-        // 15. УТИЛИТЫ
+        // 16. УТИЛИТЫ
         // ============================================
         function escapeHtml(str) {
             return String(str).replace(/[&<>"']/g, c => ({
@@ -1131,8 +1448,13 @@
             toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
+        // Клик по фону модалки
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+
         // ============================================
-        // 16. ЗАПУСК
+        // 17. ЗАПУСК
         // ============================================
         init();
     </script>
