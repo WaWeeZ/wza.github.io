@@ -2,26 +2,829 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WZ Assistant</title>
-    <!-- Подключаем скрипт Telegram -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        button { display: block; width: 100%; padding: 15px; margin: 10px 0; font-size: 16px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-primary: #17212b;
+            --bg-secondary: #232e3c;
+            --bg-tertiary: #2b3a4a;
+            --text-primary: #ffffff;
+            --text-secondary: #8b9baa;
+            --accent: #5288c1;
+            --accent-hover: #6fa3d8;
+            --success: #4caf50;
+            --danger: #e53935;
+            --warning: #ff9800;
+            --border: #2f3b4a;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #5288c1 0%, #2b5278 100%);
+            padding: 20px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.15s ease;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+            background: var(--bg-tertiary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:active {
+            background: var(--accent-hover);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* INPUTS */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .input:focus {
+            border-color: var(--accent);
+        }
+
+        .input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: color 0.15s ease;
+            font-family: inherit;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item .icon {
+            font-size: 20px;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* LIST ITEMS */
+        .list-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .list-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .list-item-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .list-item-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge-lecture { background: #5288c1; color: white; }
+        .badge-practice { background: #4caf50; color: white; }
+        .badge-seminar { background: #ff9800; color: white; }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            margin-left: 10px;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: flex-end;
+            z-index: 200;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            margin-bottom: 0;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 300;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* SCHEDULE DAY */
+        .day-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 16px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .day-header:first-child {
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
-    <h1>Приложения</h1>
-    <button onclick="alert('Расписания')">📅 Расписания</button>
-    <button onclick="alert('Задания')">📝 Задания</button>
-    <button onclick="alert('Настройки')">⚙️ Режим настройки</button>
+    <!-- HEADER -->
+    <div class="header">
+        <h1>📱 WZ Assistant</h1>
+        <div class="subtitle" id="header-subtitle">Выберите раздел</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="content"></div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-page="schedule">
+            <span class="icon">📅</span>
+            <span>Расписание</span>
+        </button>
+        <button class="nav-item" data-page="tasks">
+            <span class="icon">📝</span>
+            <span>Задания</span>
+        </button>
+        <button class="nav-item" data-page="settings">
+            <span class="icon">⚙️</span>
+            <span>Настройки</span>
+        </button>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Заголовок</div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">Сохранено</div>
 
     <script>
-        // Инициализация Mini App
+        // ============ TELEGRAM INIT ============
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Развернуть на весь экран
+        tg.expand();
+        tg.setHeaderColor('#17212b');
+        tg.setBackgroundColor('#17212b');
+
+        // ============ STATE ============
+        const state = {
+            page: 'schedule',
+            schedule: [],
+            tasks: [],
+            settings: {
+                firstLessonStart: '09:00',
+                firstLessonEnd: '10:30',
+                lessonsCount: 4
+            }
+        };
+
+        // Загружаем сохранённые данные из localStorage
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem('wz_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    state.schedule = parsed.schedule || [];
+                    state.tasks = parsed.tasks || [];
+                    state.settings = parsed.settings || state.settings;
+                }
+            } catch (e) {
+                console.error('Load error:', e);
+            }
+        }
+
+        // Сохраняем в localStorage
+        function saveToStorage() {
+            try {
+                localStorage.setItem('wz_state', JSON.stringify({
+                    schedule: state.schedule,
+                    tasks: state.tasks,
+                    settings: state.settings
+                }));
+            } catch (e) {
+                console.error('Save error:', e);
+            }
+        }
+
+        // Отправка данных боту
+        function sendToBot(action, data = {}) {
+            try {
+                const payload = JSON.stringify({ action, ...data });
+                if (tg.sendData) {
+                    tg.sendData(payload);
+                    showToast('Отправлено боту');
+                }
+                // Сохраняем локально
+                saveToStorage();
+            } catch (e) {
+                console.error('Send error:', e);
+            }
+        }
+
+        // ============ UI HELPERS ============
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function openModal(title, bodyHtml) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ============ PAGES ============
+        function renderSchedule() {
+            const content = document.getElementById('content');
+            document.getElementById('header-subtitle').textContent = 'Ваше расписание занятий';
+
+            let html = '';
+
+            if (state.schedule.length === 0) {
+                html = `
+                    <div class="empty">
+                        <div class="icon">📅</div>
+                        <p>Расписание пустое<br>Добавьте первое занятие</p>
+                    </div>
+                `;
+            } else {
+                // Группируем по дням
+                const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+                const grouped = {};
+                state.schedule.forEach(item => {
+                    const day = item.day || 'Понедельник';
+                    if (!grouped[day]) grouped[day] = [];
+                    grouped[day].push(item);
+                });
+
+                days.forEach(day => {
+                    if (grouped[day]) {
+                        html += `<div class="day-header">${day}</div>`;
+                        grouped[day].forEach(item => {
+                            const badgeClass = item.type === 'lecture' ? 'badge-lecture'
+                                            : item.type === 'practice' ? 'badge-practice'
+                                            : 'badge-seminar';
+                            const typeText = item.type === 'lecture' ? 'Лекция'
+                                            : item.type === 'practice' ? 'Практика'
+                                            : 'Семинар';
+                            html += `
+                                <div class="list-item">
+                                    <div class="list-item-info">
+                                        <div class="list-item-title">${item.name}</div>
+                                        <div class="list-item-meta">
+                                            <span class="badge ${badgeClass}">${typeText}</span>
+                                            <span>⏱ ${item.duration} мин</span>
+                                            <span>📍 ${item.place}</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-delete" onclick="deleteScheduleItem(${item.id})">🗑</button>
+                                </div>
+                            `;
+                        });
+                    }
+                });
+            }
+
+            html += `<button class="btn btn-primary" onclick="showAddSchedule()">➕ Добавить занятие</button>`;
+            content.innerHTML = html;
+        }
+
+        function renderTasks() {
+            const content = document.getElementById('content');
+            document.getElementById('header-subtitle').textContent = 'Ваши задания';
+
+            let html = '';
+
+            if (state.tasks.length === 0) {
+                html = `
+                    <div class="empty">
+                        <div class="icon">📝</div>
+                        <p>Заданий пока нет<br>Добавьте первое задание</p>
+                    </div>
+                `;
+            } else {
+                state.tasks.forEach(task => {
+                    html += `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <div class="list-item-title">${task.subject}</div>
+                                <div class="list-item-meta">
+                                    <span>${task.text}</span>
+                                </div>
+                            </div>
+                            <button class="btn-delete" onclick="deleteTaskItem(${task.id})">🗑</button>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `<button class="btn btn-primary" onclick="showAddTask()">➕ Добавить задание</button>`;
+            content.innerHTML = html;
+        }
+
+        function renderSettings() {
+            const content = document.getElementById('content');
+            document.getElementById('header-subtitle').textContent = 'Режим настройки';
+
+            const s = state.settings;
+            const html = `
+                <div class="card">
+                    <div class="card-title">🔔 Расписание перемен</div>
+                    <div class="card-subtitle">Настройте время начала и окончания занятий</div>
+                </div>
+
+                <button class="btn" onclick="showAddSchedule()">➕ Добавить в расписание занятие</button>
+                <button class="btn" onclick="showSettingsBreaks()">🔔 Настройка расписания перемен</button>
+                <button class="btn" onclick="showAddTask()">📝 Добавить задание</button>
+
+                <div class="card" style="margin-top: 16px;">
+                    <div class="card-title">📊 Текущие настройки</div>
+                    <div class="card-subtitle">
+                        Первое занятие: ${s.firstLessonStart}<br>
+                        Конец первого: ${s.firstLessonEnd}<br>
+                        Занятий в день: ${s.lessonsCount}
+                    </div>
+                </div>
+
+                <button class="btn btn-danger" onclick="clearAll()">🗑 Очистить все данные</button>
+            `;
+            content.innerHTML = html;
+        }
+
+        // ============ ACTIONS ============
+        function showAddSchedule() {
+            const body = `
+                <div class="input-group">
+                    <label class="input-label">Тип занятия</label>
+                    <select class="input" id="inp-type">
+                        <option value="lecture">📘 Лекция</option>
+                        <option value="practice">✏️ Практика</option>
+                        <option value="seminar">💬 Семинар</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Название</label>
+                    <input class="input" id="inp-name" placeholder="Например: Математика">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">День недели</label>
+                    <select class="input" id="inp-day">
+                        <option>Понедельник</option>
+                        <option>Вторник</option>
+                        <option>Среда</option>
+                        <option>Четверг</option>
+                        <option>Пятница</option>
+                        <option>Суббота</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Продолжительность (мин)</label>
+                    <input class="input" id="inp-duration" type="number" value="90" min="10">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Место проведения</label>
+                    <input class="input" id="inp-place" placeholder="Например: Ауд. 305">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeModal()">Отмена</button>
+                    <button class="btn btn-success" onclick="addScheduleItem()">Сохранить</button>
+                </div>
+            `;
+            openModal('Добавить занятие', body);
+        }
+
+        function addScheduleItem() {
+            const name = document.getElementById('inp-name').value.trim();
+            const place = document.getElementById('inp-place').value.trim();
+            if (!name || !place) {
+                showToast('Заполните все поля');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                type: document.getElementById('inp-type').value,
+                name: name,
+                day: document.getElementById('inp-day').value,
+                duration: parseInt(document.getElementById('inp-duration').value) || 90,
+                place: place
+            };
+
+            state.schedule.push(item);
+            saveToStorage();
+            sendToBot('add_schedule', item);
+            closeModal();
+            renderSchedule();
+            showToast('Занятие добавлено');
+        }
+
+        function deleteScheduleItem(id) {
+            state.schedule = state.schedule.filter(i => i.id !== id);
+            saveToStorage();
+            sendToBot('delete_schedule', { id });
+            renderSchedule();
+            showToast('Занятие удалено');
+        }
+
+        function showAddTask() {
+            const body = `
+                <div class="input-group">
+                    <label class="input-label">Предмет</label>
+                    <input class="input" id="inp-subject" placeholder="Например: Математика">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Задание</label>
+                    <textarea class="input" id="inp-text" rows="4" placeholder="Опишите задание..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeModal()">Отмена</button>
+                    <button class="btn btn-success" onclick="addTaskItem()">Сохранить</button>
+                </div>
+            `;
+            openModal('Добавить задание', body);
+        }
+
+        function addTaskItem() {
+            const subject = document.getElementById('inp-subject').value.trim();
+            const text = document.getElementById('inp-text').value.trim();
+            if (!subject || !text) {
+                showToast('Заполните все поля');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                subject: subject,
+                text: text
+            };
+
+            state.tasks.push(item);
+            saveToStorage();
+            sendToBot('add_task', item);
+            closeModal();
+            renderTasks();
+            showToast('Задание добавлено');
+        }
+
+        function deleteTaskItem(id) {
+            state.tasks = state.tasks.filter(i => i.id !== id);
+            saveToStorage();
+            sendToBot('delete_task', { id });
+            renderTasks();
+            showToast('Задание удалено');
+        }
+
+        function showSettingsBreaks() {
+            const s = state.settings;
+            const body = `
+                <div class="input-group">
+                    <label class="input-label">Начало первого занятия</label>
+                    <input class="input" id="inp-start" type="time" value="${s.firstLessonStart}">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Конец первого занятия</label>
+                    <input class="input" id="inp-end" type="time" value="${s.firstLessonEnd}">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Количество занятий в день</label>
+                    <input class="input" id="inp-count" type="number" value="${s.lessonsCount}" min="1" max="10">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeModal()">Отмена</button>
+                    <button class="btn btn-success" onclick="saveSettingsBreaks()">Сохранить</button>
+                </div>
+            `;
+            openModal('Расписание перемен', body);
+        }
+
+        function saveSettingsBreaks() {
+            state.settings = {
+                firstLessonStart: document.getElementById('inp-start').value,
+                firstLessonEnd: document.getElementById('inp-end').value,
+                lessonsCount: parseInt(document.getElementById('inp-count').value) || 4
+            };
+            saveToStorage();
+            sendToBot('settings_breaks', state.settings);
+            closeModal();
+            renderSettings();
+            showToast('Настройки сохранены');
+        }
+
+        function clearAll() {
+            if (!confirm('Удалить все данные?')) return;
+            state.schedule = [];
+            state.tasks = [];
+            saveToStorage();
+            sendToBot('clear_all');
+            renderPage();
+            showToast('Все данные удалены');
+        }
+
+        // ============ ROUTER ============
+        function renderPage() {
+            if (state.page === 'schedule') renderSchedule();
+            else if (state.page === 'tasks') renderTasks();
+            else if (state.page === 'settings') renderSettings();
+        }
+
+        document.querySelectorAll('.nav-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.page = btn.dataset.page;
+                renderPage();
+            });
+        });
+
+        // Закрытие модалки по клику вне
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+
+        // ============ INIT ============
+        loadFromStorage();
+        renderPage();
     </script>
 </body>
 </html>
