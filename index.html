@@ -1,11 +1,52 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WZ Assistant</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* ========== ПЕРЕМЕННЫЕ ТЕМ ========== */
+        :root[data-theme="dark"] {
+            --bg-primary: #0f1620;
+            --bg-secondary: #1a2433;
+            --bg-tertiary: #253243;
+            --bg-elevated: #2d3b4d;
+            --text-primary: #e8eef5;
+            --text-secondary: #7a8a9e;
+            --text-muted: #4d5c6e;
+            --accent: #5a9fd4;
+            --accent-soft: rgba(90, 159, 212, 0.15);
+            --accent-hover: #7ab5e0;
+            --success: #4dd07a;
+            --danger: #f05252;
+            --warning: #f0a848;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f4f6f9;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #eef1f6;
+            --bg-elevated: #ffffff;
+            --text-primary: #1a2433;
+            --text-secondary: #6b7a8f;
+            --text-muted: #9aa8ba;
+            --accent: #3d8bc9;
+            --accent-soft: rgba(61, 139, 201, 0.1);
+            --accent-hover: #2d7ab8;
+            --success: #2ea85a;
+            --danger: #e03e3e;
+            --warning: #e08a20;
+            --border: rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,111 +54,129 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        :root {
-            --bg-primary: #17212b;
-            --bg-secondary: #232e3c;
-            --bg-tertiary: #2b3a4a;
-            --text-primary: #ffffff;
-            --text-secondary: #8b9baa;
-            --accent: #5288c1;
-            --accent-hover: #6fa3d8;
-            --success: #4caf50;
-            --danger: #e53935;
-            --warning: #ff9800;
-            --border: #2f3b4a;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding-bottom: 80px;
+        html, body {
+            height: 100%;
             overflow-x: hidden;
         }
 
-        /* HEADER */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 88px;
+            transition: background 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        /* ========== ХЕДЕР ========== */
         .header {
-            background: linear-gradient(135deg, #5288c1 0%, #2b5278 100%);
-            padding: 20px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            background: linear-gradient(160deg, var(--accent) 0%, #2b5278 100%);
+            padding: 28px 20px 32px;
+            border-radius: 0 0 28px 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: -0.3px;
         }
 
         .header .subtitle {
             font-size: 13px;
-            opacity: 0.85;
-            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.75);
+            margin-top: 6px;
+            font-weight: 400;
         }
 
-        /* CONTENT */
+        /* ========== КОНТЕНТ ========== */
         .content {
-            padding: 16px;
-            animation: fadeIn 0.3s ease;
+            padding: 0 16px;
+            animation: fadeSlide 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CARDS */
+        /* ========== КАРТОЧКИ ========== */
         .card {
             background: var(--bg-secondary);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-            transition: transform 0.15s ease;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card:active {
-            transform: scale(0.98);
+            transform: scale(0.985);
         }
 
         .card-title {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: -0.2px;
         }
 
         .card-subtitle {
             font-size: 13px;
             color: var(--text-secondary);
+            line-height: 1.5;
         }
 
-        /* BUTTONS */
+        /* ========== КНОПКИ ========== */
         .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
+            padding: 15px 18px;
+            margin-bottom: 12px;
             background: var(--bg-secondary);
             color: var(--text-primary);
-            border: none;
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: -0.1px;
         }
 
         .btn:active {
@@ -127,7 +186,8 @@
 
         .btn-primary {
             background: var(--accent);
-            color: white;
+            color: #ffffff;
+            border-color: transparent;
         }
 
         .btn-primary:active {
@@ -136,50 +196,69 @@
 
         .btn-success {
             background: var(--success);
-            color: white;
+            color: #ffffff;
+            border-color: transparent;
         }
 
         .btn-danger {
             background: var(--danger);
-            color: white;
+            color: #ffffff;
+            border-color: transparent;
         }
 
-        /* INPUTS */
+        /* ========== ФОРМЫ ========== */
         .input-group {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .input-label {
             display: block;
             font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 500;
+            letter-spacing: -0.1px;
         }
 
         .input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px 16px;
             background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            border: 1.5px solid transparent;
+            border-radius: 14px;
             color: var(--text-primary);
             font-size: 15px;
             font-family: inherit;
             outline: none;
-            transition: border-color 0.15s ease;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.1px;
         }
 
         .input:focus {
             border-color: var(--accent);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px var(--accent-soft);
         }
 
         .input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.6;
+            color: var(--text-muted);
         }
 
-        /* BOTTOM NAV */
+        textarea.input {
+            resize: vertical;
+            min-height: 90px;
+            line-height: 1.5;
+        }
+
+        select.input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3e%3cpath fill='%237a8a9e' d='M6 8L0 0h12z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* ========== НИЖНЕЕ МЕНЮ ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -188,10 +267,12 @@
             background: var(--bg-secondary);
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
+            padding: 8px 8px 12px;
             border-top: 1px solid var(--border);
+            border-radius: 24px 24px 0 0;
             z-index: 100;
-            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
         }
 
         .nav-item {
@@ -199,53 +280,60 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 8px;
+            gap: 5px;
+            padding: 10px 8px;
             background: none;
             border: none;
             color: var(--text-secondary);
             font-size: 11px;
+            font-weight: 500;
             cursor: pointer;
-            transition: color 0.15s ease;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            border-radius: 14px;
+            letter-spacing: -0.1px;
         }
 
         .nav-item.active {
             color: var(--accent);
+            background: var(--accent-soft);
         }
 
         .nav-item .icon {
-            font-size: 20px;
+            font-size: 22px;
+            line-height: 1;
         }
 
-        /* EMPTY STATE */
+        /* ========== ПУСТЫЕ СОСТОЯНИЯ ========== */
         .empty {
             text-align: center;
-            padding: 40px 20px;
+            padding: 48px 24px;
             color: var(--text-secondary);
         }
 
         .empty .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.5;
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.4;
+            display: block;
         }
 
         .empty p {
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* LIST ITEMS */
+        /* ========== СПИСКИ ========== */
         .list-item {
             background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 10px;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
         }
 
         .list-item-info {
@@ -256,8 +344,9 @@
         .list-item-title {
             font-size: 15px;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             word-break: break-word;
+            letter-spacing: -0.2px;
         }
 
         .list-item-meta {
@@ -266,40 +355,49 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            align-items: center;
         }
 
         .badge {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: 3px 10px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.2px;
         }
 
-        .badge-lecture { background: #5288c1; color: white; }
-        .badge-practice { background: #4caf50; color: white; }
-        .badge-seminar { background: #ff9800; color: white; }
+        .badge-lecture { background: rgba(90, 159, 212, 0.2); color: #5a9fd4; }
+        .badge-practice { background: rgba(77, 208, 122, 0.2); color: #4dd07a; }
+        .badge-seminar { background: rgba(240, 168, 72, 0.2); color: #f0a848; }
 
         .btn-delete {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 8px;
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--border);
+            border-radius: 10px;
             padding: 8px 12px;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             font-family: inherit;
-            margin-left: 10px;
+            margin-left: 12px;
+            transition: all 0.18s ease;
         }
 
-        /* MODAL */
+        .btn-delete:active {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* ========== МОДАЛКА ========== */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
             display: none;
             align-items: flex-end;
             z-index: 200;
@@ -310,14 +408,20 @@
             display: flex;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
             background: var(--bg-secondary);
             width: 100%;
-            border-radius: 20px 20px 0 0;
-            padding: 20px;
+            border-radius: 28px 28px 0 0;
+            padding: 24px 20px 32px;
             max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.3s ease;
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 1px solid var(--border);
         }
 
         @keyframes slideUp {
@@ -325,52 +429,75 @@
             to { transform: translateY(0); }
         }
 
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--text-muted);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+            opacity: 0.4;
+        }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .modal-close {
-            background: none;
+            background: var(--bg-tertiary);
             border: none;
             color: var(--text-secondary);
-            font-size: 24px;
+            font-size: 18px;
             cursor: pointer;
-            padding: 0 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.18s ease;
+        }
+
+        .modal-close:active {
+            background: var(--bg-elevated);
         }
 
         .modal-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 24px;
         }
 
         .modal-actions .btn {
             margin-bottom: 0;
         }
 
-        /* TOAST */
+        /* ========== TOAST ========== */
         .toast {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: var(--success);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 14px 24px;
+            border-radius: 14px;
             font-size: 14px;
+            font-weight: 500;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 300;
             pointer-events: none;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
         }
 
         .toast.show {
@@ -378,50 +505,164 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* SCHEDULE DAY */
+        /* ========== ЗАГОЛОВОК ДНЯ ========== */
         .day-header {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--accent);
-            margin: 16px 0 8px;
+            margin: 20px 4px 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .day-header:first-child {
             margin-top: 0;
         }
+
+        /* ========== ДОСТУП ЗАПРЕЩЁН ========== */
+        .access-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .access-denied .icon {
+            font-size: 72px;
+            margin-bottom: 24px;
+        }
+
+        .access-denied h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .access-denied p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        /* ========== НАСТРОЙКИ ========== */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.1px;
+        }
+
+        .setting-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        /* ========== ПЕРЕКЛЮЧАТЕЛЬ ========== */
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toggle.active {
+            background: var(--accent);
+            border-color: transparent;
+        }
+
+        .toggle.active::after {
+            left: 23px;
+            background: #ffffff;
+        }
+
+        /* ========== СКЕЛЕТОН ========== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 16px;
+            height: 60px;
+            margin-bottom: 12px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <div class="header">
-        <h1>📱 WZ Assistant</h1>
-        <div class="subtitle" id="header-subtitle">Выберите раздел</div>
-    </div>
+    <div id="app">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-content">
+                <h1 id="header-title">📱 WZ Assistant</h1>
+                <div class="subtitle" id="header-subtitle">Загрузка...</div>
+            </div>
+        </div>
 
-    <!-- CONTENT -->
-    <div class="content" id="content"></div>
+        <!-- CONTENT -->
+        <div class="content" id="content"></div>
 
-    <!-- BOTTOM NAV -->
-    <div class="bottom-nav">
-        <button class="nav-item active" data-page="schedule">
-            <span class="icon">📅</span>
-            <span>Расписание</span>
-        </button>
-        <button class="nav-item" data-page="tasks">
-            <span class="icon">📝</span>
-            <span>Задания</span>
-        </button>
-        <button class="nav-item" data-page="settings">
-            <span class="icon">⚙️</span>
-            <span>Настройки</span>
-        </button>
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav" id="bottom-nav" style="display:none;">
+            <button class="nav-item active" data-page="schedule">
+                <span class="icon">📅</span>
+                <span>Расписание</span>
+            </button>
+            <button class="nav-item" data-page="tasks">
+                <span class="icon">📝</span>
+                <span>Задания</span>
+            </button>
+            <button class="nav-item" data-page="shared">
+                <span class="icon">🌐</span>
+                <span>Общее</span>
+            </button>
+            <button class="nav-item" data-page="settings">
+                <span class="icon">⚙️</span>
+                <span>Настройки</span>
+            </button>
+        </div>
     </div>
 
     <!-- MODAL -->
     <div class="modal" id="modal">
         <div class="modal-content">
+            <div class="modal-handle"></div>
             <div class="modal-header">
                 <div class="modal-title" id="modal-title">Заголовок</div>
                 <button class="modal-close" onclick="closeModal()">✕</button>
@@ -434,103 +675,175 @@
     <div class="toast" id="toast">Сохранено</div>
 
     <script>
-        // ============ TELEGRAM INIT ============
+        // ============================================
+        // 1. TELEGRAM INIT
+        // ============================================
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        tg.setHeaderColor('#17212b');
-        tg.setBackgroundColor('#17212b');
 
-        // ============ STATE ============
+        // ============================================
+        // 2. ТЕМА
+        // ============================================
+        function initTheme() {
+            const saved = localStorage.getItem('wz_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+
+            const bg = saved === 'dark' ? '#0f1620' : '#f4f6f9';
+            tg.setHeaderColor(bg);
+            tg.setBackgroundColor(bg);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('wz_theme', next);
+
+            const bg = next === 'dark' ? '#0f1620' : '#f4f6f9';
+            tg.setHeaderColor(bg);
+            tg.setBackgroundColor(bg);
+
+            showToast(next === 'dark' ? '🌙 Тёмная тема' : '☀️ Светлая тема');
+            if (state.page === 'settings') renderSettings();
+        }
+
+        // ============================================
+        // 3. ЗАГРУЗКА ДАННЫХ С GITHUB
+        // ============================================
+        const DATA_BASE = './data';
+
+        async function loadJSON(name) {
+            try {
+                const res = await fetch(`${DATA_BASE}/${name}.json?v=${Date.now()}`);
+                if (!res.ok) throw new Error('Not found');
+                return await res.json();
+            } catch (e) {
+                console.warn(`Не удалось загрузить ${name}:`, e);
+                return null;
+            }
+        }
+
+        // ============================================
+        // 4. STATE
+        // ============================================
         const state = {
             page: 'schedule',
+            user: null,
+            role: 'guest',
+            participants: {},
             schedule: [],
             tasks: [],
-            settings: {
-                firstLessonStart: '09:00',
-                firstLessonEnd: '10:30',
-                lessonsCount: 4
-            }
+            files: [],
+            notes: [],
+            substitutions: [],
+            loaded: false
         };
 
-        // Загружаем сохранённые данные из localStorage
-        function loadFromStorage() {
-            try {
-                const saved = localStorage.getItem('wz_state');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    state.schedule = parsed.schedule || [];
-                    state.tasks = parsed.tasks || [];
-                    state.settings = parsed.settings || state.settings;
-                }
-            } catch (e) {
-                console.error('Load error:', e);
+        // ============================================
+        // 5. ИНИЦИАЛИЗАЦИЯ
+        // ============================================
+        async function init() {
+            initTheme();
+
+            // Получаем юзера
+            state.user = tg.initDataUnsafe?.user || null;
+
+            // Загружаем данные
+            const [participants, schedule, files, notes, substitutions] = await Promise.all([
+                loadJSON('participants'),
+                loadJSON('schedule'),
+                loadJSON('files'),
+                loadJSON('notes'),
+                loadJSON('substitutions')
+            ]);
+
+            state.participants = participants || {};
+            state.schedule = schedule?.lessons || [];
+            state.files = files?.categories || [];
+            state.notes = notes?.notes || [];
+            state.substitutions = substitutions?.substitutions || [];
+
+            // Определяем роль
+            if (state.user) {
+                const uid = String(state.user.id);
+                const p = state.participants[uid];
+                state.role = p ? p.role : 'guest';
+                state.userName = p ? p.name : (state.user.first_name || 'Гость');
+            } else {
+                // Если открыто в браузере (без Telegram) — даём роль guest для теста
+                state.role = 'guest';
+                state.userName = 'Тестовый пользователь';
             }
-        }
 
-        // Сохраняем в localStorage
-        function saveToStorage() {
-            try {
-                localStorage.setItem('wz_state', JSON.stringify({
-                    schedule: state.schedule,
-                    tasks: state.tasks,
-                    settings: state.settings
-                }));
-            } catch (e) {
-                console.error('Save error:', e);
+            state.loaded = true;
+
+            // Проверяем доступ
+            if (state.role === 'guest') {
+                renderAccessDenied();
+                return;
             }
+
+            // Показываем навигацию и рендерим
+            document.getElementById('bottom-nav').style.display = 'flex';
+            setupNav();
+            renderPage();
         }
 
-        // Отправка данных боту
-        function sendToBot(action, data = {}) {
-            try {
-                const payload = JSON.stringify({ action, ...data });
-                if (tg.sendData) {
-                    tg.sendData(payload);
-                    showToast('Отправлено боту');
-                }
-                // Сохраняем локально
-                saveToStorage();
-            } catch (e) {
-                console.error('Send error:', e);
-            }
-        }
-
-        // ============ UI HELPERS ============
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        function openModal(title, bodyHtml) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-body').innerHTML = bodyHtml;
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        // ============ PAGES ============
-        function renderSchedule() {
+        // ============================================
+        // 6. ПРОВЕРКА ДОСТУПА
+        // ============================================
+        function renderAccessDenied() {
+            document.getElementById('header-subtitle').textContent = 'Доступ ограничен';
             const content = document.getElementById('content');
-            document.getElementById('header-subtitle').textContent = 'Ваше расписание занятий';
+            content.innerHTML = `
+                <div class="access-denied">
+                    <div class="icon">🚫</div>
+                    <h2>Доступ запрещён</h2>
+                    <p>Вы не являетесь участником приложения. Пожалуйста, обратитесь к <b>Мистеру WaWeeZ</b> для получения доступа.</p>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // 7. РОУТЕР
+        // ============================================
+        function setupNav() {
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.page = btn.dataset.page;
+                    renderPage();
+                });
+            });
+        }
+
+        function renderPage() {
+            if (state.page === 'schedule') renderSchedule();
+            else if (state.page === 'tasks') renderTasks();
+            else if (state.page === 'shared') renderShared();
+            else if (state.page === 'settings') renderSettings();
+        }
+
+        // ============================================
+        // 8. РАСПИСАНИЕ
+        // ============================================
+        function renderSchedule() {
+            document.getElementById('header-subtitle').textContent = 'Ваше расписание';
+            const content = document.getElementById('content');
 
             let html = '';
 
             if (state.schedule.length === 0) {
                 html = `
                     <div class="empty">
-                        <div class="icon">📅</div>
+                        <span class="icon">📅</span>
                         <p>Расписание пустое<br>Добавьте первое занятие</p>
                     </div>
                 `;
             } else {
-                // Группируем по дням
-                const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+                const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
                 const grouped = {};
                 state.schedule.forEach(item => {
                     const day = item.day || 'Понедельник';
@@ -551,14 +864,14 @@
                             html += `
                                 <div class="list-item">
                                     <div class="list-item-info">
-                                        <div class="list-item-title">${item.name}</div>
+                                        <div class="list-item-title">${escapeHtml(item.name)}</div>
                                         <div class="list-item-meta">
                                             <span class="badge ${badgeClass}">${typeText}</span>
                                             <span>⏱ ${item.duration} мин</span>
-                                            <span>📍 ${item.place}</span>
+                                            <span>📍 ${escapeHtml(item.place)}</span>
                                         </div>
                                     </div>
-                                    <button class="btn-delete" onclick="deleteScheduleItem(${item.id})">🗑</button>
+                                    ${canEdit() ? `<button class="btn-delete" onclick="deleteScheduleItem('${item.id}')">🗑</button>` : ''}
                                 </div>
                             `;
                         });
@@ -566,21 +879,27 @@
                 });
             }
 
-            html += `<button class="btn btn-primary" onclick="showAddSchedule()">➕ Добавить занятие</button>`;
+            if (canEdit()) {
+                html += `<button class="btn btn-primary" onclick="showAddSchedule()">➕ Добавить занятие</button>`;
+            }
+
             content.innerHTML = html;
         }
 
+        // ============================================
+        // 9. ЗАДАНИЯ
+        // ============================================
         function renderTasks() {
-            const content = document.getElementById('content');
             document.getElementById('header-subtitle').textContent = 'Ваши задания';
+            const content = document.getElementById('content');
 
             let html = '';
 
             if (state.tasks.length === 0) {
                 html = `
                     <div class="empty">
-                        <div class="icon">📝</div>
-                        <p>Заданий пока нет<br>Добавьте первое задание</p>
+                        <span class="icon">📝</span>
+                        <p>Заданий пока нет</p>
                     </div>
                 `;
             } else {
@@ -588,51 +907,107 @@
                     html += `
                         <div class="list-item">
                             <div class="list-item-info">
-                                <div class="list-item-title">${task.subject}</div>
-                                <div class="list-item-meta">
-                                    <span>${task.text}</span>
-                                </div>
+                                <div class="list-item-title">${escapeHtml(task.subject)}</div>
+                                <div class="list-item-meta">${escapeHtml(task.text)}</div>
                             </div>
-                            <button class="btn-delete" onclick="deleteTaskItem(${task.id})">🗑</button>
                         </div>
                     `;
                 });
             }
 
-            html += `<button class="btn btn-primary" onclick="showAddTask()">➕ Добавить задание</button>`;
             content.innerHTML = html;
         }
 
-        function renderSettings() {
+        // ============================================
+        // 10. ОБЩЕЕ ПРОСТРАНСТВО
+        // ============================================
+        function renderShared() {
+            document.getElementById('header-subtitle').textContent = 'Общее пространство';
             const content = document.getElementById('content');
-            document.getElementById('header-subtitle').textContent = 'Режим настройки';
 
-            const s = state.settings;
-            const html = `
+            let html = `
                 <div class="card">
-                    <div class="card-title">🔔 Расписание перемен</div>
-                    <div class="card-subtitle">Настройте время начала и окончания занятий</div>
+                    <div class="card-title">📁 Хранилище файлов</div>
+                    <div class="card-subtitle">${state.files.length} категорий</div>
                 </div>
-
-                <button class="btn" onclick="showAddSchedule()">➕ Добавить в расписание занятие</button>
-                <button class="btn" onclick="showSettingsBreaks()">🔔 Настройка расписания перемен</button>
-                <button class="btn" onclick="showAddTask()">📝 Добавить задание</button>
-
-                <div class="card" style="margin-top: 16px;">
-                    <div class="card-title">📊 Текущие настройки</div>
-                    <div class="card-subtitle">
-                        Первое занятие: ${s.firstLessonStart}<br>
-                        Конец первого: ${s.firstLessonEnd}<br>
-                        Занятий в день: ${s.lessonsCount}
-                    </div>
+                <div class="card">
+                    <div class="card-title">📝 Общие заметки</div>
+                    <div class="card-subtitle">${state.notes.length} заметок</div>
                 </div>
-
-                <button class="btn btn-danger" onclick="clearAll()">🗑 Очистить все данные</button>
+                <div class="card">
+                    <div class="card-title">⚠️ Скоро</div>
+                    <div class="card-subtitle">Полная версия «Общего пространства» появится после подключения бота</div>
+                </div>
             `;
             content.innerHTML = html;
         }
 
-        // ============ ACTIONS ============
+        // ============================================
+        // 11. НАСТРОЙКИ
+        // ============================================
+        function renderSettings() {
+            document.getElementById('header-subtitle').textContent = 'Настройки';
+            const content = document.getElementById('content');
+
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+            let html = `
+                <div class="card">
+                    <div class="setting-row">
+                        <div>
+                            <div class="setting-label">🎨 Тема оформления</div>
+                            <div class="setting-desc">${isDark ? 'Тёмная' : 'Светлая'}</div>
+                        </div>
+                        <div class="toggle ${isDark ? 'active' : ''}" onclick="toggleTheme()"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">👤 Профиль</div>
+                    <div class="card-subtitle">
+                        Имя: ${escapeHtml(state.userName)}<br>
+                        Роль: ${roleName(state.role)}
+                    </div>
+                </div>
+            `;
+
+            // Замены в расписании — только владелец и староста
+            if (state.role === 'owner' || state.role === 'starosta') {
+                html += `<button class="btn" onclick="showSubstitutions()">🔄 Замены в расписании</button>`;
+            }
+
+            // Общее пространство — только владелец и староста
+            if (state.role === 'owner' || state.role === 'starosta') {
+                html += `<button class="btn" onclick="showSharedSettings()">🌐 Общее пространство</button>`;
+            }
+
+            content.innerHTML = html;
+        }
+
+        // ============================================
+        // 12. ПРАВА
+        // ============================================
+        function canEdit() {
+            return state.role === 'owner' || state.role === 'starosta';
+        }
+
+        function roleName(role) {
+            return { owner: '👑 Владелец', starosta: '🎓 Староста', member: '👤 Ученик', guest: '🚫 Гость' }[role] || role;
+        }
+
+        // ============================================
+        // 13. МОДАЛКИ
+        // ============================================
+        function openModal(title, bodyHtml) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
         function showAddSchedule() {
             const body = `
                 <div class="input-group">
@@ -645,7 +1020,7 @@
                 </div>
                 <div class="input-group">
                     <label class="input-label">Название</label>
-                    <input class="input" id="inp-name" placeholder="Например: Математика">
+                    <input class="input" id="inp-name" placeholder="Математика">
                 </div>
                 <div class="input-group">
                     <label class="input-label">День недели</label>
@@ -660,11 +1035,11 @@
                 </div>
                 <div class="input-group">
                     <label class="input-label">Продолжительность (мин)</label>
-                    <input class="input" id="inp-duration" type="number" value="90" min="10">
+                    <input class="input" id="inp-duration" type="number" value="90">
                 </div>
                 <div class="input-group">
-                    <label class="input-label">Место проведения</label>
-                    <input class="input" id="inp-place" placeholder="Например: Ауд. 305">
+                    <label class="input-label">Место</label>
+                    <input class="input" id="inp-place" placeholder="Ауд. 305">
                 </div>
                 <div class="modal-actions">
                     <button class="btn" onclick="closeModal()">Отмена</button>
@@ -677,22 +1052,18 @@
         function addScheduleItem() {
             const name = document.getElementById('inp-name').value.trim();
             const place = document.getElementById('inp-place').value.trim();
-            if (!name || !place) {
-                showToast('Заполните все поля');
-                return;
-            }
+            if (!name || !place) return showToast('Заполните все поля');
 
             const item = {
-                id: Date.now(),
+                id: String(Date.now()),
                 type: document.getElementById('inp-type').value,
-                name: name,
+                name,
                 day: document.getElementById('inp-day').value,
                 duration: parseInt(document.getElementById('inp-duration').value) || 90,
-                place: place
+                place
             };
 
             state.schedule.push(item);
-            saveToStorage();
             sendToBot('add_schedule', item);
             closeModal();
             renderSchedule();
@@ -701,130 +1072,69 @@
 
         function deleteScheduleItem(id) {
             state.schedule = state.schedule.filter(i => i.id !== id);
-            saveToStorage();
             sendToBot('delete_schedule', { id });
             renderSchedule();
-            showToast('Занятие удалено');
+            showToast('Удалено');
         }
 
-        function showAddTask() {
-            const body = `
-                <div class="input-group">
-                    <label class="input-label">Предмет</label>
-                    <input class="input" id="inp-subject" placeholder="Например: Математика">
+        function showSubstitutions() {
+            openModal('Замены в расписании', `
+                <div class="empty" style="padding: 24px;">
+                    <span class="icon">🔄</span>
+                    <p>Функционал замен появится после подключения бота</p>
                 </div>
-                <div class="input-group">
-                    <label class="input-label">Задание</label>
-                    <textarea class="input" id="inp-text" rows="4" placeholder="Опишите задание..."></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal()">Отмена</button>
-                    <button class="btn btn-success" onclick="addTaskItem()">Сохранить</button>
-                </div>
-            `;
-            openModal('Добавить задание', body);
+                <button class="btn" onclick="closeModal()">Понятно</button>
+            `);
         }
 
-        function addTaskItem() {
-            const subject = document.getElementById('inp-subject').value.trim();
-            const text = document.getElementById('inp-text').value.trim();
-            if (!subject || !text) {
-                showToast('Заполните все поля');
-                return;
+        function showSharedSettings() {
+            openModal('Общее пространство', `
+                <div class="card">
+                    <div class="card-title">📁 Хранилище файлов</div>
+                    <div class="card-subtitle">Добавление и удаление файлов</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📝 Заметки</div>
+                    <div class="card-subtitle">Общие заметки пользователей</div>
+                </div>
+                <button class="btn" onclick="closeModal()">Закрыть</button>
+            `);
+        }
+
+        // ============================================
+        // 14. ОТПРАВКА БОТУ
+        // ============================================
+        function sendToBot(action, data = {}) {
+            try {
+                if (tg.sendData) {
+                    tg.sendData(JSON.stringify({ action, ...data }));
+                }
+            } catch (e) {
+                console.warn('sendData error:', e);
             }
-
-            const item = {
-                id: Date.now(),
-                subject: subject,
-                text: text
-            };
-
-            state.tasks.push(item);
-            saveToStorage();
-            sendToBot('add_task', item);
-            closeModal();
-            renderTasks();
-            showToast('Задание добавлено');
         }
 
-        function deleteTaskItem(id) {
-            state.tasks = state.tasks.filter(i => i.id !== id);
-            saveToStorage();
-            sendToBot('delete_task', { id });
-            renderTasks();
-            showToast('Задание удалено');
+        // ============================================
+        // 15. УТИЛИТЫ
+        // ============================================
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
         }
 
-        function showSettingsBreaks() {
-            const s = state.settings;
-            const body = `
-                <div class="input-group">
-                    <label class="input-label">Начало первого занятия</label>
-                    <input class="input" id="inp-start" type="time" value="${s.firstLessonStart}">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Конец первого занятия</label>
-                    <input class="input" id="inp-end" type="time" value="${s.firstLessonEnd}">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Количество занятий в день</label>
-                    <input class="input" id="inp-count" type="number" value="${s.lessonsCount}" min="1" max="10">
-                </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal()">Отмена</button>
-                    <button class="btn btn-success" onclick="saveSettingsBreaks()">Сохранить</button>
-                </div>
-            `;
-            openModal('Расписание перемен', body);
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function saveSettingsBreaks() {
-            state.settings = {
-                firstLessonStart: document.getElementById('inp-start').value,
-                firstLessonEnd: document.getElementById('inp-end').value,
-                lessonsCount: parseInt(document.getElementById('inp-count').value) || 4
-            };
-            saveToStorage();
-            sendToBot('settings_breaks', state.settings);
-            closeModal();
-            renderSettings();
-            showToast('Настройки сохранены');
-        }
-
-        function clearAll() {
-            if (!confirm('Удалить все данные?')) return;
-            state.schedule = [];
-            state.tasks = [];
-            saveToStorage();
-            sendToBot('clear_all');
-            renderPage();
-            showToast('Все данные удалены');
-        }
-
-        // ============ ROUTER ============
-        function renderPage() {
-            if (state.page === 'schedule') renderSchedule();
-            else if (state.page === 'tasks') renderTasks();
-            else if (state.page === 'settings') renderSettings();
-        }
-
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.page = btn.dataset.page;
-                renderPage();
-            });
-        });
-
-        // Закрытие модалки по клику вне
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') closeModal();
-        });
-
-        // ============ INIT ============
-        loadFromStorage();
-        renderPage();
+        // ============================================
+        // 16. ЗАПУСК
+        // ============================================
+        init();
     </script>
 </body>
 </html>
